@@ -66,6 +66,8 @@
    <xs:element name='loginRPNT' type='tns:loginRPNT'/>
    <xs:element name='loginRPNTResponse' type='tns:loginRPNTResponse'/>
    <xs:element name='loginResponse' type='tns:loginResponse'/>
+   <xs:element name='modificaCPV' type='tns:modificaCPV'/>
+   <xs:element name='modificaCPVResponse' type='tns:modificaCPVResponse'/>
    <xs:element name='modificaDatiPerfezionamento' type='tns:modificaDatiPerfezionamento'/>
    <xs:element name='modificaDatiPerfezionamentoResponse' type='tns:modificaDatiPerfezionamentoResponse'/>
    <xs:element name='modificaGara' type='tns:modificaGara'/>
@@ -133,6 +135,31 @@
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='ResponseModificaDatiPerfezionamento'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='messaggio' type='xs:string'/>
+     <xs:element name='success' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='error' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='modificaCPV'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='ticket' type='xs:string'/>
+     <xs:element minOccurs='0' name='indexCollaborazione' type='xs:string'/>
+     <xs:element minOccurs='0' name='cig' type='xs:string'/>
+     <xs:element minOccurs='0' name='CPV_PREVALENTE' type='xs:string'/>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='CPV_SECONDARIA' type='tns:CPVSecondariaType'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='CPVSecondariaType'>
+    <xs:sequence/>
+    <xs:attribute ref='tns:COD_CPV_SECONDARIA' use='required'/>
+   </xs:complexType>
+   <xs:complexType name='modificaCPVResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='return' type='tns:ResponseModificaCPV'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='ResponseModificaCPV'>
     <xs:sequence>
      <xs:element minOccurs='0' name='messaggio' type='xs:string'/>
      <xs:element name='success' type='xs:boolean'/>
@@ -340,9 +367,7 @@
     <xs:attribute ref='tns:TEMATICA_PNRR'/>
    </xs:complexType>
    <xs:simpleType name='CupType'>
-    <xs:restriction base='xs:string'>
-		<xs:maxLength value="15" />
-    </xs:restriction>
+    <xs:restriction base='xs:string'/>
    </xs:simpleType>
    <xs:simpleType name='LongType'>
     <xs:restriction base='xs:long'/>
@@ -357,10 +382,6 @@
    <xs:simpleType name='CondizioneLottoType'>
     <xs:restriction base='xs:string'/>
    </xs:simpleType>
-   <xs:complexType name='CPVSecondariaType'>
-    <xs:sequence/>
-    <xs:attribute ref='tns:COD_CPV_SECONDARIA' use='required'/>
-   </xs:complexType>
    <xs:simpleType name='ImportoLottoType'>
     <xs:restriction base='xs:decimal'/>
    </xs:simpleType>
@@ -1947,7 +1968,7 @@
    <xs:attribute name='SISTEMA_QUALIFICAZIONE' type='tns:FlagSNType'/>
    <xs:attribute name='SITO_MINISTERO_INF_TRASP' type='tns:FlagSNType'/>
    <xs:attribute name='SITO_OSSERVATORIO_CP' type='tns:FlagSNType'/>
-   <xs:attribute name='SOGGETTO_ESTERO' type='tns:FlagSNType'/>
+   <xs:attribute name='SOGGETTO_ESTERO' type='xs:string'/>
    <xs:attribute name='SOMMA_URGENZA' type='tns:FlagSNType'/>
    <xs:attribute name='SSAA_RIF_I' type='xs:string'/>
    <xs:attribute name='STATO_AVCPASS' type='tns:StatoAVCPASSType'/>
@@ -1994,6 +2015,9 @@
  </types>
  <message name='SimogWSPDD_perfezionaGaraResponse'>
   <part element='tns:perfezionaGaraResponse' name='perfezionaGaraResponse'></part>
+ </message>
+ <message name='SimogWSPDD_modificaCPVResponse'>
+  <part element='tns:modificaCPVResponse' name='modificaCPVResponse'></part>
  </message>
  <message name='SimogWSPDD_integraCUP'>
   <part element='tns:integraCUP' name='integraCUP'></part>
@@ -2121,6 +2145,9 @@
  <message name='SimogWSPDD_modificaGara'>
   <part element='tns:modificaGara' name='modificaGara'></part>
  </message>
+ <message name='SimogWSPDD_modificaCPV'>
+  <part element='tns:modificaCPV' name='modificaCPV'></part>
+ </message>
  <message name='SimogWSPDD_login'>
   <part element='tns:login' name='login'></part>
  </message>
@@ -2180,6 +2207,10 @@
   <operation name='loginRPNT' parameterOrder='loginRPNT'>
    <input message='tns:SimogWSPDD_loginRPNT'></input>
    <output message='tns:SimogWSPDD_loginRPNTResponse'></output>
+  </operation>
+  <operation name='modificaCPV' parameterOrder='modificaCPV'>
+   <input message='tns:SimogWSPDD_modificaCPV'></input>
+   <output message='tns:SimogWSPDD_modificaCPVResponse'></output>
   </operation>
   <operation name='modificaDatiPerfezionamento' parameterOrder='modificaDatiPerfezionamento'>
    <input message='tns:SimogWSPDD_modificaDatiPerfezionamento'></input>
@@ -2334,6 +2365,15 @@
    </output>
   </operation>
   <operation name='loginRPNT'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='modificaCPV'>
    <soap:operation soapAction=''/>
    <input>
     <soap:body use='literal'/>
